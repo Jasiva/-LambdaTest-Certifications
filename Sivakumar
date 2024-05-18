@@ -1,0 +1,153 @@
+//Test Scenario 1:
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class LambdaTestDemo {
+
+    public static void main(String[] args) {
+      
+        String url = "https://www.lambdatest.com/selenium-playground";
+        WebDriver driver = new ChromeDriver();
+        driver.get(url);
+
+   
+        WebElement simpleFormDemoLink = driver.findElement(By.linkText("Simple Form Demo"));
+        simpleFormDemoLink.click();
+
+       
+        String currentUrl = driver.getCurrentUrl();
+        if (currentUrl.contains("simple-form-demo")) {
+            System.out.println("URL validation successful.");
+        } else {
+            System.out.println("URL validation failed.");
+        }
+
+    
+        String message = "Welcome to LambdaTest";
+
+    
+        WebElement messageInput = driver.findElement(By.id("user-message"));
+        messageInput.clear();
+        messageInput.sendKeys(message);
+
+       
+        WebElement showMessageButton = driver.findElement(By.xpath("//button[text()='Show Message']"));
+        showMessageButton.click();
+
+     
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebElement displayedMessageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("display")));
+        String displayedMessage = displayedMessageElement.getText();
+        if (displayedMessage.equals(message)) {
+            System.out.println("Validation successful! Message displayed correctly: " + displayedMessage);
+        } else {
+            System.out.println("Validation failed! Expected: " + message + ", Actual: " + displayedMessage);
+        }
+
+        
+        driver.quit();
+    }
+}
+//Test Scenario 2:
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class LambdaTestSliderDemo {
+
+    public static void main(String[] args) {
+        // Step 1: Open LambdaTest’s Selenium Playground
+        String url = "https://www.lambdatest.com/selenium-playground";
+        WebDriver driver = new ChromeDriver();
+        driver.get(url);
+
+        
+        WebElement dragDropSlidersLink = driver.findElement(By.linkText("Drag & Drop Sliders"));
+        dragDropSlidersLink.click();
+
+     
+        WebElement slider = driver.findElement(By.xpath("//div[@id='slider1']//span[@class='ui-slider-handle']"));
+        Actions action = new Actions(driver);
+        action.clickAndHold(slider).moveByOffset(200, 0).release().perform();
+
+      
+        WebElement rangeValue = driver.findElement(By.xpath("//span[@id='range']"));
+        String currentValue = rangeValue.getText();
+        if (currentValue.equals("95")) {
+            System.out.println("Validation successful! Range value shows 95.");
+        } else {
+            System.out.println("Validation failed! Expected: 95, Actual: " + currentValue);
+        }
+
+    
+        driver.quit();
+    }
+}
+Test Scenario 3:
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+public class LambdaTestInputFormDemo {
+
+    public static void main(String[] args) {
+        // Step 1: Open LambdaTest’s Selenium Playground
+        String url = "https://www.lambdatest.com/selenium-playground";
+        WebDriver driver = new ChromeDriver();
+        driver.get(url);
+
+        // Step 2: Click “Input Form Submit” under “Input Forms”
+        WebElement inputFormSubmitLink = driver.findElement(By.linkText("Input Form Submit"));
+        inputFormSubmitLink.click();
+
+        // Step 3: Click “Submit” without filling in any information in the form
+        WebElement submitButton = driver.findElement(By.xpath("//button[text()='Submit']"));
+        submitButton.click();
+
+        // Step 4: Assert “Please fill in the fields” error message
+        WebElement errorMessage = driver.findElement(By.xpath("//div[contains(@class, 'alert-danger')]"));
+        if (errorMessage.getText().equals("Please fill in the fields")) {
+            System.out.println("Validation successful! Error message displayed: " + errorMessage.getText());
+        } else {
+            System.out.println("Validation failed! Expected: Please fill in the fields, Actual: " + errorMessage.getText());
+        }
+
+        // Step 5: Fill in Name, Email, and other fields
+        driver.findElement(By.name("first_name")).sendKeys("John");
+        driver.findElement(By.name("last_name")).sendKeys("Doe");
+        driver.findElement(By.name("email")).sendKeys("john.doe@example.com");
+        driver.findElement(By.name("website")).sendKeys("https://example.com");
+        driver.findElement(By.name("phone")).sendKeys("1234567890");
+        driver.findElement(By.name("address")).sendKeys("123 Main Street");
+        driver.findElement(By.name("city")).sendKeys("Anytown");
+        driver.findElement(By.name("state")).sendKeys("California");
+        driver.findElement(By.name("zip")).sendKeys("12345");
+
+        // Step 6: From the Country drop-down, select “United States” using the text property
+        WebElement countryDropdown = driver.findElement(By.name("country"));
+        Select selectCountry = new Select(countryDropdown);
+        selectCountry.selectByVisibleText("United States");
+
+        // Step 7: Fill all fields and click “Submit”
+        submitButton.click();
+
+        // Step 8: Validate the success message
+        WebElement successMessage = driver.findElement(By.xpath("//div[contains(@class, 'alert-success')]"));
+        if (successMessage.getText().equals("Thanks for contacting us, we will get back to you shortly.")) {
+            System.out.println("Validation successful! Success message displayed: " + successMessage.getText());
+        } else {
+            System.out.println("Validation failed! Expected: Thanks for contacting us, we will get back to you shortly., Actual: " + successMessage.getText());
+        }
+
+        // Close the browser
+        driver.quit();
+    }
+}
